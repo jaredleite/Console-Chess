@@ -23,6 +23,10 @@
             return _Pieces[row, column];
         }
 
+        public void PlacePiece(Piece piece,Position pos)
+        {
+            _Pieces[pos.Row, pos.Column] = piece;
+        }
 
     }
 }
