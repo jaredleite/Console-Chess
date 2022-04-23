@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Board;
+using board;
 
 namespace Console_Chess
 {
@@ -11,9 +7,7 @@ namespace Console_Chess
     {
         static void Main(string[] args)
         {
-            Position position = new Position(2, 4);
-
-            Console.WriteLine("Position: " + position);
+            Board board = new Board(8,8);
 
         }
     }
