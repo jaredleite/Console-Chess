@@ -18,5 +18,7 @@
             Board = board;
             NumMoviments = 0;
         }
+
+        
     }
 }
