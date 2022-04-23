@@ -10,20 +10,9 @@ namespace Console_Chess
         {
             Board board = new Board(8,8);
 
-            try
-            {
-                board.PlacePiece(new Rook(Color.White, board), new Position(0, 0));
-                board.PlacePiece(new Rook(Color.White, board), new Position(10, 5));
-                board.PlacePiece(new King(Color.White, board), new Position(0, 0));
-
-                Screen.PrintingBoard(board);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-
+            ChessPosition chessPosition = new ChessPosition('a', 8);
+            Console.WriteLine(chessPosition.ToPosition());
+            Console.WriteLine(chessPosition.ToString());
         }
     }
 }
