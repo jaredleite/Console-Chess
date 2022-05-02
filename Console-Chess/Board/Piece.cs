@@ -1,11 +1,12 @@
 ﻿namespace board
 {
-    internal class Piece
+    abstract class Piece
     {
         public Position Position { get; set; }
         public Color Color { get; protected set; }
         public int NumMoviments { get; protected set; }
         public Board Board {get; protected set; }
+
 
         public Piece()
         {
@@ -19,6 +20,11 @@
             NumMoviments = 0;
         }
 
-        
+        public void IncrementNumMoviments()
+        {
+            NumMoviments++;
+        }
+
+        public abstract bool[,] ValidMoves();
     }
 }

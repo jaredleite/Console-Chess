@@ -36,23 +36,36 @@
                 throw new BoardException("Already exists a piece in this position!");
             }
             _Pieces[pos.Row, pos.Column] = piece;
+            piece.Position = pos;
+        }
+
+        public Piece RemovePiece(Position pos)
+        {
+            if(Piece(pos) == null)
+            {
+                return null;
+            }
+            Piece aux = Piece(pos);
+            aux.Position = null;
+            _Pieces[pos.Row, pos.Column] = null;
+            return aux;
         }
 
         public bool ExistPiece(Position pos)
         {
-            _validingPosition(pos);
+            ValidingPosition(pos);
             return Piece(pos) != null;
         }
 
-        public bool _validPosition(Position pos)
+        public bool ValidPosition(Position pos)
         {
             return pos.Row >=0 && pos.Column >=0 &&
                 pos.Row < Rows && pos.Column < Columns;
         }
 
-        public void _validingPosition(Position pos)
+        public void ValidingPosition(Position pos)
         {
-            if (! _validPosition(pos)){
+            if (! ValidPosition(pos)){
                 throw new BoardException("Invalid position!");
             }
         }
