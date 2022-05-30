@@ -18,10 +18,10 @@ namespace Console_Chess
                     try
                     {
                         Console.Clear();
-                        Screen.PrintingBoard(chessMatch.Board);
+                        Screen.PrintingMatch(chessMatch);
                         Console.WriteLine();
-                        Console.WriteLine("Turn # " + chessMatch.Turn);
-                        Console.WriteLine("Waiting for " + chessMatch.PlayerTurn + " Player");
+                        //Console.WriteLine("Turn # " + chessMatch.Turn);
+                        //Console.WriteLine("Waiting for " + chessMatch.PlayerTurn + " Player");
 
                         Console.Write("Origin: ");
                         Position origin = Screen.ReadChessPosition().ToPosition();
