@@ -26,5 +26,29 @@
         }
 
         public abstract bool[,] ValidMoves();
+
+        public bool ExistValidMoves()
+        {
+            //int numValidMoves = 0;
+            bool[,] mat = ValidMoves();
+            for(int j = 0; j < Board.Columns; j++)
+            {
+                for(int i = 0; i < Board.Rows; i++)
+                {
+                    if(mat[i, j])
+                    {
+                        return true;
+                        //numValidMoves++;
+                    }
+                }
+            }
+            return false;
+            //return numValidMoves > 0;
+        }
+
+        public bool CanMoveTo (Position pos)
+        {
+            return ValidMoves()[pos.Row, pos.Column];
+        }
     }
 }

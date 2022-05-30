@@ -6,8 +6,8 @@ namespace chess
     internal class ChessMatch
     {
         public Board Board { get; private set; }
-        private int Turn { get; set; }
-        public Color PlayerTurn { get; set; }
+        public int Turn { get; private set; }
+        public Color PlayerTurn { get; private set; }
         public bool GameOver { get; private set; }
 
         public ChessMatch()
@@ -19,13 +19,59 @@ namespace chess
             PlacePiece();
         }
 
+        public void CheckOrginPosition(Position pos)
+        {
+            if(Board.Piece(pos) == null)
+            {
+                throw new BoardException("There is not a piece in the selected position!");
+            }
+            if(PlayerTurn != Board.Piece(pos).Color)
+            {
+                throw new BoardException("Selected piece is not " + PlayerTurn + "!");
+            }
+            if (!Board.Piece(pos).ExistValidMoves())
+            {
+                throw new BoardException("Selected piece has not valid moves!");
+            }
+        }
+
+        public void CheckDestinyPosition(Position origin, Position destiny)
+        {
+            if(!Board.Piece(origin).CanMoveTo(destiny))
+            {
+                throw new BoardException("Invalid destiny position!");
+            }
+        }
+
         public void ExecuteMove(Position posFrom, Position posTo)
         {
             Piece piece = Board.RemovePiece(posFrom);
             piece.IncrementNumMoviments();
-            Piece capturedPiece =  Board.RemovePiece(posTo);
+            Piece capturedPiece = Board.RemovePiece(posTo);
             Board.PlacePiece(piece, posTo);
 
+        }
+
+        public void MakeMove(Position posFrom, Position posTo)
+        {
+            ExecuteMove(posFrom, posTo);
+            Turn++;
+            ChangePlayer();
+
+            
+        }
+
+
+        private void ChangePlayer()
+        {
+            if (PlayerTurn == Color.White)
+            {
+                PlayerTurn = Color.Black;
+            }
+            else
+            {
+                PlayerTurn = Color.White;
+            }
         }
 
         public void PlacePiece()
