@@ -12,17 +12,63 @@ namespace chess
         public bool GameOver { get; private set; }
         private HashSet<Piece> Pieces;
         private HashSet<Piece> Captured;
+        public bool Check { get; private set; }
         public ChessMatch()
         {
             Board = new Board(8, 8);
             Turn = 1;
             GameOver = false;
+            Check = false;  
             PlayerTurn = Color.White;
             Pieces = new HashSet<Piece>();
             Captured = new HashSet<Piece>();
             PlacePiece();
         }
 
+        private Color AdversaryColor(Color color)
+        {
+            if(color == Color.White)
+            {
+                return Color.Black;
+            }
+            else
+            {
+                return Color.White;
+            }
+        }
+        
+        private Piece King(Color color)
+        {
+            foreach(Piece x in PiecesInGame(color))
+            {
+                if (x is King)
+                {
+                    return x;
+                }
+            }
+            return null;
+        }
+
+        public bool IsKingInCheck(Color color)
+        {
+            Piece k = King(color);
+
+            if(k == null)
+            {
+                throw new BoardException("There is no King in board!");
+            }
+
+            foreach(Piece x in PiecesInGame(AdversaryColor(color)))
+            {
+                bool[,] mat = x.ValidMoves();
+
+                if(mat[k.Position.Row, k.Position.Column])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public void CheckOrginPosition(Position pos)
         {
             if(Board.Piece(pos) == null)
@@ -47,7 +93,7 @@ namespace chess
             }
         }
 
-        public void ExecuteMove(Position posFrom, Position posTo)
+        public Piece ExecuteMove(Position posFrom, Position posTo)
         {
             Piece piece = Board.RemovePiece(posFrom);
             piece.IncrementNumMoviments();
@@ -57,7 +103,7 @@ namespace chess
             {
                 Captured.Add(capturedPiece);
             }
-
+            return capturedPiece;
         }
 
         public HashSet<Piece> CapturedPieces(Color color)
@@ -89,13 +135,39 @@ namespace chess
 
         public void MakeMove(Position posFrom, Position posTo)
         {
-            ExecuteMove(posFrom, posTo);
-            Turn++;
-            ChangePlayer();
+            Piece capturedPiece = ExecuteMove(posFrom, posTo);
 
-            
+            if (IsKingInCheck(PlayerTurn))
+            {
+                UndoMove(posFrom, posTo, capturedPiece);
+                throw new BoardException("You can't be in check!");
+            }
+
+            if (IsKingInCheck(AdversaryColor(PlayerTurn)))
+            {
+                Check = true;
+            }
+            else
+            {
+                Check = false;
+            }
+
+
+                Turn++;
+            ChangePlayer();    
         }
 
+        public void UndoMove(Position posFrom, Position posTo, Piece capturedPiece)
+        {
+            Piece p = Board.RemovePiece(posTo);
+            Turn--;
+            if (capturedPiece != null)
+            {
+                Board.PlacePiece(capturedPiece, posTo);
+                Captured.Remove(capturedPiece);
+            }
+            Board.PlacePiece(p, posFrom);
+        }
 
         private void ChangePlayer()
         {

@@ -16,6 +16,10 @@ namespace board
 
             Console.WriteLine("Turn # " + chessMatch.Turn);
             Console.WriteLine("Waiting for " + chessMatch.PlayerTurn + " Player");
+            if (chessMatch.Check)
+            {
+                Console.WriteLine("Check!");
+            }
         }
 
         public static void PrintingCapturedPieces(ChessMatch chessMatch)

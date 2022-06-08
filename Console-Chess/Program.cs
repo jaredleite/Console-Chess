@@ -20,9 +20,7 @@ namespace Console_Chess
                         Console.Clear();
                         Screen.PrintingMatch(chessMatch);
                         Console.WriteLine();
-                        //Console.WriteLine("Turn # " + chessMatch.Turn);
-                        //Console.WriteLine("Waiting for " + chessMatch.PlayerTurn + " Player");
-
+                        
                         Console.Write("Origin: ");
                         Position origin = Screen.ReadChessPosition().ToPosition();
                         chessMatch.CheckOrginPosition(origin);
