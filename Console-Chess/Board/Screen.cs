@@ -15,10 +15,18 @@ namespace board
             PrintingCapturedPieces(chessMatch);
 
             Console.WriteLine("Turn # " + chessMatch.Turn);
-            Console.WriteLine("Waiting for " + chessMatch.PlayerTurn + " Player");
-            if (chessMatch.Check)
+            if (!chessMatch.GameOver)
             {
-                Console.WriteLine("Check!");
+                Console.WriteLine("Waiting for " + chessMatch.PlayerTurn + " Player");
+                if (chessMatch.Check)
+                {
+                    Console.WriteLine("Check!");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Checkmate!");
+                Console.WriteLine("Winner: " + chessMatch.PlayerTurn);
             }
         }
 

@@ -48,6 +48,38 @@ namespace chess
             }
             return null;
         }
+        
+        public bool IsCheckmate(Color color)
+        {
+            if (!IsKingInCheck(color))
+            {
+                return false;
+            }
+            foreach(Piece x in PiecesInGame(color))
+            {
+                bool[,] mat = x.ValidMoves();
+                for(int i = 0; i < Board.Rows; i++)
+                {
+                    for (int j = 0; j < Board.Columns; j++)
+                    {
+                        if (mat[i, j])
+                        {
+                            Position posDestiny = new Position(i, j);
+                            Position posOrigin = x.Position;
+                            Piece capturedPiece = ExecuteMove(x.Position, posDestiny);
+                            bool testCheck = IsKingInCheck(color);
+                            UndoMove(posOrigin, posDestiny, capturedPiece);
+                            if (!testCheck)
+                            {
+                                return false;
+                            }
+
+                        }
+                    }
+                }
+            }
+            return true;
+        }
 
         public bool IsKingInCheck(Color color)
         {
@@ -152,15 +184,21 @@ namespace chess
                 Check = false;
             }
 
-
+            if (IsCheckmate(AdversaryColor(PlayerTurn)))
+            {
+                GameOver = true;
+            }
+            else
+            {
                 Turn++;
-            ChangePlayer();    
+                ChangePlayer();
+            }
         }
 
         public void UndoMove(Position posFrom, Position posTo, Piece capturedPiece)
         {
             Piece p = Board.RemovePiece(posTo);
-            Turn--;
+            //Turn--;
             if (capturedPiece != null)
             {
                 Board.PlacePiece(capturedPiece, posTo);
